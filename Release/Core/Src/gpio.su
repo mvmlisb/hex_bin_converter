@@ -1,0 +1,4 @@
+../Core/Src/gpio.c:37:6:MX_GPIO_Init	56	static
+../Core/Src/gpio.c:86:6:MX_GPIO_InitConfigurationPin	32	static
+../Core/Src/gpio.c:104:6:MX_GPIO_ReinitInBinToHexMode	40	static
+../Core/Src/gpio.c:133:6:MX_GPIO_RenitInHexToBinMode	48	static
