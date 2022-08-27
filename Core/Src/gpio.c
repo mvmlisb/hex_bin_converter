@@ -36,50 +36,13 @@
 */
 void MX_GPIO_Init(void)
 {
-
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, SWITCH_DISPLAY_Pin|DISPLAY_A_Pin|DISPLAY_B_Pin|DISPLAY_C_Pin
-                          |DISPLAY_D_Pin|DISPLAY_E_Pin|DISPLAY_F_Pin|DISPLAY_G_Pin
-                          |MS_BINARY_1_Pin|MS_BINARY_2_Pin|MS_BINARY_4_Pin|MS_BINARY_8_Pin
-                          |LS_BINARY_1_Pin|LS_BINARY_8_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, LS_BINARY_2_Pin|LS_BINARY_4_Pin, GPIO_PIN_RESET);
-
-  /*Configure GPIO pins : PAPin PAPin PAPin PAPin
-                           PAPin PAPin PAPin PAPin
-                           PAPin PAPin PAPin PAPin
-                           PAPin PAPin */
-  GPIO_InitStruct.Pin = SWITCH_DISPLAY_Pin|DISPLAY_A_Pin|DISPLAY_B_Pin|DISPLAY_C_Pin
-                          |DISPLAY_D_Pin|DISPLAY_E_Pin|DISPLAY_F_Pin|DISPLAY_G_Pin
-                          |MS_BINARY_1_Pin|MS_BINARY_2_Pin|MS_BINARY_4_Pin|MS_BINARY_8_Pin
-                          |LS_BINARY_1_Pin|LS_BINARY_8_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : PBPin PBPin PBPin PBPin
-                           PBPin */
-  GPIO_InitStruct.Pin = MS_INCREMENT_BUTTON_Pin|MS_DECREMENT_BUTTON_Pin|LS_INCREMENT_BUTTON_Pin|LS_DECREMENT_BUTTON_Pin
-                          |CONFIGURATION_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : PBPin PBPin */
-  GPIO_InitStruct.Pin = LS_BINARY_2_Pin|LS_BINARY_4_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
+  MX_GPIO_InitConfigurationPin();
 }
 
 /* USER CODE BEGIN 2 */
@@ -92,12 +55,6 @@ void MX_GPIO_InitConfigurationPin() {
   GPIO_InitStruct.Pull = GPIO_NOPULL;
 
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-//  /* GPIO Ports Clock Enable */
-//  __HAL_RCC_GPIOA_CLK_ENABLE();
-//  __HAL_RCC_GPIOB_CLK_ENABLE();
-//
-//  MX_GPIO_InitConfigurationPin();
 }
 
 
