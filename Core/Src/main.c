@@ -136,16 +136,13 @@ void updateDisplay() {
 }
 
 void updateButton(Button *button) {
-	ButtonPinState isButtonPressedBefore = button->isButtonPressed;
-	ButtonPinState isButtonPressedNow = (ButtonPinState)HAL_GPIO_ReadPin(GPIOB, button->pin) == BUTTON_IS_PRESSED;
-
-	if(isButtonPressedNow && isButtonPressedBefore) {
+	if((ButtonPinState)HAL_GPIO_ReadPin(GPIOB, button->pin) == BUTTON_IS_PRESSED && button->isButtonPressed) {
 		button->isButtonPressed = 0;
 		button->needToProcces = 1;
 		button->pressedMillis = HAL_GetTick();
 	}
 
-	if(!isButtonPressedBefore && (HAL_GetTick() - button->pressedMillis) > BUTTON_DEBOUNCE_MILLIS)
+	if(!button->isButtonPressed && (HAL_GetTick() - button->pressedMillis) > BUTTON_DEBOUNCE_MILLIS)
 		button->isButtonPressed = 1;
 }
 

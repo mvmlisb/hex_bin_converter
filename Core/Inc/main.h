@@ -106,7 +106,7 @@ void updateDisplay();
 #define MAX_NUMBER 15
 #define NUMBER_COUNT 16
 
-#define BUTTON_DEBOUNCE_MILLIS 325
+#define BUTTON_DEBOUNCE_MILLIS 275
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
