@@ -295,7 +295,7 @@ Disassembly of section .text:
  80002b8:	9402      	str	r4, [sp, #8]
  80002ba:	9403      	str	r4, [sp, #12]
  80002bc:	f000 fb20 	bl	8000900 <HAL_GPIO_Init>
- 80002c0:	2370      	movs	r3, #112	; 0x70
+ 80002c0:	2330      	movs	r3, #48	; 0x30
  80002c2:	4804      	ldr	r0, [pc, #16]	; (80002d4 <MX_GPIO_ReinitInBinToHexMode+0x58>)
  80002c4:	a901      	add	r1, sp, #4
  80002c6:	9301      	str	r3, [sp, #4]
@@ -484,8 +484,8 @@ Disassembly of section .text:
  8000458:	05ed      	lsls	r5, r5, #23
  800045a:	7833      	ldrb	r3, [r6, #0]
  800045c:	0028      	movs	r0, r5
- 800045e:	40a1      	lsls	r1, r4
- 8000460:	439a      	bics	r2, r3
+ 800045e:	439a      	bics	r2, r3
+ 8000460:	0209      	lsls	r1, r1, #8
  8000462:	f000 fb01 	bl	8000a68 <HAL_GPIO_WritePin>
  8000466:	7833      	ldrb	r3, [r6, #0]
  8000468:	0022      	movs	r2, r4
@@ -493,54 +493,54 @@ Disassembly of section .text:
  800046c:	2180      	movs	r1, #128	; 0x80
  800046e:	0028      	movs	r0, r5
  8000470:	439a      	bics	r2, r3
- 8000472:	0089      	lsls	r1, r1, #2
+ 8000472:	0109      	lsls	r1, r1, #4
  8000474:	f000 faf8 	bl	8000a68 <HAL_GPIO_WritePin>
  8000478:	0022      	movs	r2, r4
- 800047a:	2180      	movs	r1, #128	; 0x80
- 800047c:	7833      	ldrb	r3, [r6, #0]
- 800047e:	0028      	movs	r0, r5
- 8000480:	089b      	lsrs	r3, r3, #2
- 8000482:	439a      	bics	r2, r3
- 8000484:	00c9      	lsls	r1, r1, #3
- 8000486:	f000 faef 	bl	8000a68 <HAL_GPIO_WritePin>
- 800048a:	0022      	movs	r2, r4
- 800048c:	2180      	movs	r1, #128	; 0x80
- 800048e:	7833      	ldrb	r3, [r6, #0]
- 8000490:	0028      	movs	r0, r5
- 8000492:	08db      	lsrs	r3, r3, #3
- 8000494:	439a      	bics	r2, r3
- 8000496:	0109      	lsls	r1, r1, #4
- 8000498:	f000 fae6 	bl	8000a68 <HAL_GPIO_WritePin>
- 800049c:	0022      	movs	r2, r4
- 800049e:	2180      	movs	r1, #128	; 0x80
- 80004a0:	4e11      	ldr	r6, [pc, #68]	; (80004e8 <writeBinaryRepresention+0x9c>)
- 80004a2:	0028      	movs	r0, r5
- 80004a4:	7833      	ldrb	r3, [r6, #0]
- 80004a6:	0149      	lsls	r1, r1, #5
- 80004a8:	439a      	bics	r2, r3
- 80004aa:	f000 fadd 	bl	8000a68 <HAL_GPIO_WritePin>
- 80004ae:	7833      	ldrb	r3, [r6, #0]
- 80004b0:	0022      	movs	r2, r4
- 80004b2:	40e3      	lsrs	r3, r4
- 80004b4:	4f0d      	ldr	r7, [pc, #52]	; (80004ec <writeBinaryRepresention+0xa0>)
- 80004b6:	439a      	bics	r2, r3
- 80004b8:	0038      	movs	r0, r7
- 80004ba:	2110      	movs	r1, #16
- 80004bc:	f000 fad4 	bl	8000a68 <HAL_GPIO_WritePin>
- 80004c0:	0022      	movs	r2, r4
+ 800047a:	7833      	ldrb	r3, [r6, #0]
+ 800047c:	0028      	movs	r0, r5
+ 800047e:	089b      	lsrs	r3, r3, #2
+ 8000480:	439a      	bics	r2, r3
+ 8000482:	2120      	movs	r1, #32
+ 8000484:	f000 faf0 	bl	8000a68 <HAL_GPIO_WritePin>
+ 8000488:	0022      	movs	r2, r4
+ 800048a:	2180      	movs	r1, #128	; 0x80
+ 800048c:	7833      	ldrb	r3, [r6, #0]
+ 800048e:	0028      	movs	r0, r5
+ 8000490:	08db      	lsrs	r3, r3, #3
+ 8000492:	439a      	bics	r2, r3
+ 8000494:	0149      	lsls	r1, r1, #5
+ 8000496:	f000 fae7 	bl	8000a68 <HAL_GPIO_WritePin>
+ 800049a:	0022      	movs	r2, r4
+ 800049c:	4e12      	ldr	r6, [pc, #72]	; (80004e8 <writeBinaryRepresention+0x9c>)
+ 800049e:	0028      	movs	r0, r5
+ 80004a0:	7833      	ldrb	r3, [r6, #0]
+ 80004a2:	2110      	movs	r1, #16
+ 80004a4:	439a      	bics	r2, r3
+ 80004a6:	f000 fadf 	bl	8000a68 <HAL_GPIO_WritePin>
+ 80004aa:	7833      	ldrb	r3, [r6, #0]
+ 80004ac:	0022      	movs	r2, r4
+ 80004ae:	40e3      	lsrs	r3, r4
+ 80004b0:	2180      	movs	r1, #128	; 0x80
+ 80004b2:	4f0e      	ldr	r7, [pc, #56]	; (80004ec <writeBinaryRepresention+0xa0>)
+ 80004b4:	439a      	bics	r2, r3
+ 80004b6:	0038      	movs	r0, r7
+ 80004b8:	0089      	lsls	r1, r1, #2
+ 80004ba:	f000 fad5 	bl	8000a68 <HAL_GPIO_WritePin>
+ 80004be:	0022      	movs	r2, r4
+ 80004c0:	2180      	movs	r1, #128	; 0x80
  80004c2:	7833      	ldrb	r3, [r6, #0]
  80004c4:	0038      	movs	r0, r7
  80004c6:	089b      	lsrs	r3, r3, #2
  80004c8:	439a      	bics	r2, r3
- 80004ca:	2120      	movs	r1, #32
+ 80004ca:	00c9      	lsls	r1, r1, #3
  80004cc:	f000 facc 	bl	8000a68 <HAL_GPIO_WritePin>
  80004d0:	0022      	movs	r2, r4
  80004d2:	2180      	movs	r1, #128	; 0x80
  80004d4:	7833      	ldrb	r3, [r6, #0]
  80004d6:	0028      	movs	r0, r5
  80004d8:	08db      	lsrs	r3, r3, #3
- 80004da:	439a      	bics	r2, r3
- 80004dc:	0209      	lsls	r1, r1, #8
+ 80004da:	40a1      	lsls	r1, r4
+ 80004dc:	439a      	bics	r2, r3
  80004de:	f000 fac3 	bl	8000a68 <HAL_GPIO_WritePin>
  80004e2:	bdf8      	pop	{r3, r4, r5, r6, r7, pc}
  80004e4:	20000076 	.word	0x20000076
@@ -610,46 +610,46 @@ Disassembly of section .text:
  8000568:	2180      	movs	r1, #128	; 0x80
  800056a:	05e4      	lsls	r4, r4, #23
  800056c:	0020      	movs	r0, r4
- 800056e:	0049      	lsls	r1, r1, #1
+ 800056e:	0209      	lsls	r1, r1, #8
  8000570:	f000 fa74 	bl	8000a5c <HAL_GPIO_ReadPin>
  8000574:	2180      	movs	r1, #128	; 0x80
  8000576:	0005      	movs	r5, r0
- 8000578:	0089      	lsls	r1, r1, #2
+ 8000578:	0109      	lsls	r1, r1, #4
  800057a:	0020      	movs	r0, r4
  800057c:	f000 fa6e 	bl	8000a5c <HAL_GPIO_ReadPin>
- 8000580:	2180      	movs	r1, #128	; 0x80
+ 8000580:	2120      	movs	r1, #32
  8000582:	0006      	movs	r6, r0
- 8000584:	00c9      	lsls	r1, r1, #3
- 8000586:	0020      	movs	r0, r4
- 8000588:	f000 fa68 	bl	8000a5c <HAL_GPIO_ReadPin>
- 800058c:	2180      	movs	r1, #128	; 0x80
- 800058e:	0007      	movs	r7, r0
- 8000590:	0109      	lsls	r1, r1, #4
- 8000592:	0020      	movs	r0, r4
- 8000594:	f000 fa62 	bl	8000a5c <HAL_GPIO_ReadPin>
- 8000598:	003a      	movs	r2, r7
- 800059a:	0003      	movs	r3, r0
- 800059c:	0031      	movs	r1, r6
- 800059e:	0028      	movs	r0, r5
- 80005a0:	f7ff ffd6 	bl	8000550 <getNumberFromInvertedBits>
- 80005a4:	2180      	movs	r1, #128	; 0x80
- 80005a6:	4b10      	ldr	r3, [pc, #64]	; (80005e8 <readBinaryRepresention+0x84>)
- 80005a8:	0149      	lsls	r1, r1, #5
- 80005aa:	7018      	strb	r0, [r3, #0]
- 80005ac:	0020      	movs	r0, r4
- 80005ae:	f000 fa55 	bl	8000a5c <HAL_GPIO_ReadPin>
- 80005b2:	4f0e      	ldr	r7, [pc, #56]	; (80005ec <readBinaryRepresention+0x88>)
- 80005b4:	0005      	movs	r5, r0
- 80005b6:	2110      	movs	r1, #16
- 80005b8:	0038      	movs	r0, r7
- 80005ba:	f000 fa4f 	bl	8000a5c <HAL_GPIO_ReadPin>
- 80005be:	2120      	movs	r1, #32
- 80005c0:	0006      	movs	r6, r0
+ 8000584:	0020      	movs	r0, r4
+ 8000586:	f000 fa69 	bl	8000a5c <HAL_GPIO_ReadPin>
+ 800058a:	2180      	movs	r1, #128	; 0x80
+ 800058c:	0007      	movs	r7, r0
+ 800058e:	0149      	lsls	r1, r1, #5
+ 8000590:	0020      	movs	r0, r4
+ 8000592:	f000 fa63 	bl	8000a5c <HAL_GPIO_ReadPin>
+ 8000596:	003a      	movs	r2, r7
+ 8000598:	0003      	movs	r3, r0
+ 800059a:	0031      	movs	r1, r6
+ 800059c:	0028      	movs	r0, r5
+ 800059e:	f7ff ffd7 	bl	8000550 <getNumberFromInvertedBits>
+ 80005a2:	4b11      	ldr	r3, [pc, #68]	; (80005e8 <readBinaryRepresention+0x84>)
+ 80005a4:	2110      	movs	r1, #16
+ 80005a6:	7018      	strb	r0, [r3, #0]
+ 80005a8:	0020      	movs	r0, r4
+ 80005aa:	f000 fa57 	bl	8000a5c <HAL_GPIO_ReadPin>
+ 80005ae:	2180      	movs	r1, #128	; 0x80
+ 80005b0:	4f0e      	ldr	r7, [pc, #56]	; (80005ec <readBinaryRepresention+0x88>)
+ 80005b2:	0005      	movs	r5, r0
+ 80005b4:	0089      	lsls	r1, r1, #2
+ 80005b6:	0038      	movs	r0, r7
+ 80005b8:	f000 fa50 	bl	8000a5c <HAL_GPIO_ReadPin>
+ 80005bc:	2180      	movs	r1, #128	; 0x80
+ 80005be:	0006      	movs	r6, r0
+ 80005c0:	00c9      	lsls	r1, r1, #3
  80005c2:	0038      	movs	r0, r7
  80005c4:	f000 fa4a 	bl	8000a5c <HAL_GPIO_ReadPin>
  80005c8:	2180      	movs	r1, #128	; 0x80
  80005ca:	0007      	movs	r7, r0
- 80005cc:	0209      	lsls	r1, r1, #8
+ 80005cc:	0049      	lsls	r1, r1, #1
  80005ce:	0020      	movs	r0, r4
  80005d0:	f000 fa44 	bl	8000a5c <HAL_GPIO_ReadPin>
  80005d4:	003a      	movs	r2, r7
