@@ -126,8 +126,15 @@ BoardMode boardMode;
 uint8_t lsNumber;
 uint8_t msNumber;
 
-void updateDisplayMode() {
-	displayMode = (DisplayMode) HAL_GPIO_ReadPin(GPIOB, DISPLAY_MODE_Pin);
+void updateDisplayModeAndSetDotState() {
+	DisplayMode newDisplayMode = (DisplayMode) HAL_GPIO_ReadPin(GPIOB, DISPLAY_MODE_Pin);
+
+	if(displayMode == newDisplayMode)
+		return;
+
+	HAL_GPIO_WritePin(GPIOB, MS_INCREMENT_BUTTON_Pin, newDisplayMode == FROM_BITS ? GPIO_PIN_RESET : GPIO_PIN_SET);
+
+	displayMode = newDisplayMode;
 }
 
 void updateDisplay() {
@@ -147,6 +154,7 @@ void updateDisplay() {
 		activeDisplay = notActiveDisplay;
 	} else {
 		activeDisplay = MS_DISPLAY;
+
 	}
 }
 
@@ -300,7 +308,7 @@ int main(void)
 	  if(boardMode == HEX_TO_BIN_MODE)
 		  pollAndProcessButtons();
 	  else{
-		  updateDisplayMode();
+		  updateDisplayModeAndSetDotState();
 		  if(displayMode == FROM_BITS)
 			  readBinaryRepresention();
 	  }
