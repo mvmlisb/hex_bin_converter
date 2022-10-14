@@ -334,7 +334,7 @@ Disassembly of section .text:
  800030e:	9403      	str	r4, [sp, #12]
  8000310:	9404      	str	r4, [sp, #16]
  8000312:	f000 faf5 	bl	8000900 <HAL_GPIO_Init>
- 8000316:	234f      	movs	r3, #79	; 0x4f
+ 8000316:	230f      	movs	r3, #15
  8000318:	0028      	movs	r0, r5
  800031a:	a901      	add	r1, sp, #4
  800031c:	9301      	str	r3, [sp, #4]

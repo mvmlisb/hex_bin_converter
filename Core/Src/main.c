@@ -31,7 +31,7 @@
 typedef enum {
 	HEX_TO_BIN_MODE,
 	BIN_TO_HEX_MODE,
-} ConfigurationMode;
+} BoardMode;
 
 typedef enum {
 	MS_DISPLAY,
@@ -75,13 +75,13 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 uint8_t DisplayPins[] = {
-	DISPLAY_A_Pin,
-	DISPLAY_B_Pin,
-	DISPLAY_C_Pin,
-	DISPLAY_D_Pin,
-	DISPLAY_E_Pin,
-	DISPLAY_F_Pin,
-	DISPLAY_G_Pin,
+	OUTPUT_DISPLAY_A_Pin,
+	OUTPUT_DISPLAY_B_Pin,
+	OUTPUT_DISPLAY_C_Pin,
+	OUTPUT_DISPLAY_D_Pin,
+	OUTPUT_DISPLAY_E_Pin,
+	OUTPUT_DISPLAY_F_Pin,
+	OUTPUT_DISPLAY_G_Pin,
 };
 
 GPIO_PinState NumberToDisplaySegments[NUMBER_COUNT] = {
@@ -114,7 +114,7 @@ Button buttons[] = {
 size_t ButtonCount = sizeof(buttons) / sizeof(Button);
 
 
-ConfigurationMode configurationMode;
+BoardMode boardMode;
 
 uint8_t lsNumber;
 uint8_t msNumber;
@@ -123,12 +123,12 @@ void updateDisplay() {
 	static ActiveDisplay activeDisplay = LS_DISPLAY;
 
 	ActiveDisplay notActiveDisplay = activeDisplay == MS_DISPLAY ? LS_DISPLAY : MS_DISPLAY;
-	HAL_GPIO_WritePin(GPIOA, SWITCH_DISPLAY_Pin, notActiveDisplay);
+	HAL_GPIO_WritePin(GPIOA, DISPLAY_SWITCH_Pin, notActiveDisplay);
 	for (uint8_t i = 0; i < DISPLAY_SEGMENT_COUNT; i++)
 	    HAL_GPIO_WritePin(GPIOA, DisplayPins[i], GPIO_PIN_RESET);
 
 	uint8_t number = activeDisplay == MS_DISPLAY ? msNumber : lsNumber;
-	HAL_GPIO_WritePin(GPIOA, SWITCH_DISPLAY_Pin, activeDisplay);
+	HAL_GPIO_WritePin(GPIOA, DISPLAY_SWITCH_Pin, activeDisplay);
 	for (uint8_t i = 0; i < DISPLAY_SEGMENT_COUNT; i++)
 	    HAL_GPIO_WritePin(GPIOA, DisplayPins[i], NumberToDisplaySegments[number] << i & 0x40);
 
@@ -264,14 +264,14 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM14_Init();
   /* USER CODE BEGIN 2 */
-  configurationMode = HAL_GPIO_ReadPin(GPIOB, CONFIGURATION_Pin);
+  boardMode = HAL_GPIO_ReadPin(GPIOB, BOARD_MODE_Pin);
 
-  if(configurationMode == HEX_TO_BIN_MODE)
+  if(boardMode == HEX_TO_BIN_MODE)
 	  MX_GPIO_RenitInHexToBinMode();
   else
 	  MX_GPIO_ReinitInBinToHexMode();
 
-  if(configurationMode == HEX_TO_BIN_MODE)
+  if(boardMode == HEX_TO_BIN_MODE)
 	  writeBinaryRepresention();
 
   HAL_TIM_Base_Start_IT(&htim14);
@@ -282,7 +282,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  if(configurationMode == HEX_TO_BIN_MODE)
+	  if(boardMode == HEX_TO_BIN_MODE)
 		  pollAndProcessButtons();
 	  else
 	  	  readBinaryRepresention();
