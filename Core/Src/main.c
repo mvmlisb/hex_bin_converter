@@ -34,6 +34,11 @@ typedef enum {
 } BoardMode;
 
 typedef enum {
+	FROM_INPUT, // .1 – конвертуємо DEC в HEX 0 – нічого не конвертуємо
+	FROM_BITS,
+} DisplayMode;
+
+typedef enum {
 	MS_DISPLAY,
 	LS_DISPLAY
 } ActiveDisplay;
@@ -74,6 +79,8 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+DisplayMode displayMode;
+
 uint8_t DisplayPins[] = {
 	OUTPUT_DISPLAY_A_Pin,
 	OUTPUT_DISPLAY_B_Pin,
@@ -119,20 +126,28 @@ BoardMode boardMode;
 uint8_t lsNumber;
 uint8_t msNumber;
 
+void updateDisplayMode() {
+	displayMode = (DisplayMode) HAL_GPIO_ReadPin(GPIOB, DISPLAY_MODE_Pin);
+}
+
 void updateDisplay() {
 	static ActiveDisplay activeDisplay = LS_DISPLAY;
 
-	ActiveDisplay notActiveDisplay = activeDisplay == MS_DISPLAY ? LS_DISPLAY : MS_DISPLAY;
-	HAL_GPIO_WritePin(GPIOA, DISPLAY_SWITCH_Pin, notActiveDisplay);
-	for (uint8_t i = 0; i < DISPLAY_SEGMENT_COUNT; i++)
-	    HAL_GPIO_WritePin(GPIOA, DisplayPins[i], GPIO_PIN_RESET);
+	if(boardMode == HEX_TO_BIN_MODE || (boardMode == BIN_TO_HEX_MODE && displayMode == FROM_BITS)) {
+		ActiveDisplay notActiveDisplay = activeDisplay == MS_DISPLAY ? LS_DISPLAY : MS_DISPLAY;
+		HAL_GPIO_WritePin(GPIOA, DISPLAY_SWITCH_Pin, notActiveDisplay);
+		for (uint8_t i = 0; i < DISPLAY_SEGMENT_COUNT; i++)
+		    HAL_GPIO_WritePin(GPIOA, DisplayPins[i], GPIO_PIN_RESET);
 
-	uint8_t number = activeDisplay == MS_DISPLAY ? msNumber : lsNumber;
-	HAL_GPIO_WritePin(GPIOA, DISPLAY_SWITCH_Pin, activeDisplay);
-	for (uint8_t i = 0; i < DISPLAY_SEGMENT_COUNT; i++)
-	    HAL_GPIO_WritePin(GPIOA, DisplayPins[i], NumberToDisplaySegments[number] << i & 0x40);
+		uint8_t number = activeDisplay == MS_DISPLAY ? msNumber : lsNumber;
+		HAL_GPIO_WritePin(GPIOA, DISPLAY_SWITCH_Pin, activeDisplay);
+		for (uint8_t i = 0; i < DISPLAY_SEGMENT_COUNT; i++)
+		    HAL_GPIO_WritePin(GPIOA, DisplayPins[i], NumberToDisplaySegments[number] << i & 0x40);
 
-	activeDisplay = notActiveDisplay;
+		activeDisplay = notActiveDisplay;
+	} else {
+		activeDisplay = MS_DISPLAY;
+	}
 }
 
 void updateButton(Button *button) {
@@ -284,8 +299,11 @@ int main(void)
   {
 	  if(boardMode == HEX_TO_BIN_MODE)
 		  pollAndProcessButtons();
-	  else
-	  	  readBinaryRepresention();
+	  else{
+		  updateDisplayMode();
+		  if(displayMode == FROM_BITS)
+			  readBinaryRepresention();
+	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
