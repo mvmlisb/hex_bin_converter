@@ -92,7 +92,8 @@ void MX_GPIO_ReinitInBinToHexMode(void)
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
   /*Configure GPIO pins : PBPin PBPin PBPin PBPin */
-  GPIO_InitStruct.Pin = LS_BINARY_1_Pin|MS_BINARY_4_Pin|DISPLAY_MODE_Pin;
+  GPIO_InitStruct.Pin = LS_BINARY_1_Pin|MS_BINARY_4_Pin|DISPLAY_MODE_Pin
+		  |INPUT_DISPLAY_D_Pin|INPUT_DISPLAY_E_Pin|INPUT_DISPLAY_F_Pin|INPUT_DISPLAY_G_Pin|INPUT_DISPLAY_A_Pin|INPUT_DISPLAY_B_Pin|INPUT_DISPLAY_C_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);

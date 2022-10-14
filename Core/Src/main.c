@@ -126,15 +126,8 @@ BoardMode boardMode;
 uint8_t lsNumber;
 uint8_t msNumber;
 
-void updateDisplayModeAndSetDotState() {
-	DisplayMode newDisplayMode = (DisplayMode) HAL_GPIO_ReadPin(GPIOB, DISPLAY_MODE_Pin);
-
-	if(displayMode == newDisplayMode)
-		return;
-
-	HAL_GPIO_WritePin(GPIOB, MS_INCREMENT_BUTTON_Pin, newDisplayMode == FROM_BITS ? GPIO_PIN_RESET : GPIO_PIN_SET);
-
-	displayMode = newDisplayMode;
+void updateDisplayMode() {
+	displayMode = (DisplayMode)HAL_GPIO_ReadPin(GPIOB, DISPLAY_MODE_Pin);
 }
 
 void updateDisplay() {
@@ -151,10 +144,23 @@ void updateDisplay() {
 		for (uint8_t i = 0; i < DISPLAY_SEGMENT_COUNT; i++)
 		    HAL_GPIO_WritePin(GPIOA, DisplayPins[i], NumberToDisplaySegments[number] << i & 0x40);
 
+		if(boardMode == BIN_TO_HEX_MODE)
+			HAL_GPIO_WritePin(GPIOB, MS_INCREMENT_BUTTON_Pin, GPIO_PIN_RESET);
+
 		activeDisplay = notActiveDisplay;
 	} else {
-		activeDisplay = MS_DISPLAY;
+		activeDisplay = LS_DISPLAY;
+		HAL_GPIO_WritePin(GPIOA, DISPLAY_SWITCH_Pin, activeDisplay);
 
+		HAL_GPIO_WritePin(GPIOA, OUTPUT_DISPLAY_A_Pin, HAL_GPIO_ReadPin(GPIOB, INPUT_DISPLAY_A_Pin));
+		HAL_GPIO_WritePin(GPIOA, OUTPUT_DISPLAY_B_Pin, HAL_GPIO_ReadPin(GPIOB, INPUT_DISPLAY_B_Pin));
+		HAL_GPIO_WritePin(GPIOA, OUTPUT_DISPLAY_C_Pin, HAL_GPIO_ReadPin(GPIOB, INPUT_DISPLAY_C_Pin));
+		HAL_GPIO_WritePin(GPIOA, OUTPUT_DISPLAY_D_Pin, HAL_GPIO_ReadPin(GPIOB, INPUT_DISPLAY_D_Pin));
+		HAL_GPIO_WritePin(GPIOA, OUTPUT_DISPLAY_E_Pin, HAL_GPIO_ReadPin(GPIOB, INPUT_DISPLAY_E_Pin));
+		HAL_GPIO_WritePin(GPIOA, OUTPUT_DISPLAY_F_Pin, HAL_GPIO_ReadPin(GPIOB, INPUT_DISPLAY_F_Pin));
+		HAL_GPIO_WritePin(GPIOA, OUTPUT_DISPLAY_G_Pin, HAL_GPIO_ReadPin(GPIOB, INPUT_DISPLAY_G_Pin));
+
+		HAL_GPIO_WritePin(GPIOB, MS_INCREMENT_BUTTON_Pin, GPIO_PIN_SET);
 	}
 }
 
@@ -289,13 +295,12 @@ int main(void)
   /* USER CODE BEGIN 2 */
   boardMode = HAL_GPIO_ReadPin(GPIOB, BOARD_MODE_Pin);
 
-  if(boardMode == HEX_TO_BIN_MODE)
+  if(boardMode == HEX_TO_BIN_MODE){
 	  MX_GPIO_RenitInHexToBinMode();
+	  writeBinaryRepresention();
+  }
   else
 	  MX_GPIO_ReinitInBinToHexMode();
-
-  if(boardMode == HEX_TO_BIN_MODE)
-	  writeBinaryRepresention();
 
   HAL_TIM_Base_Start_IT(&htim14);
 
@@ -308,9 +313,8 @@ int main(void)
 	  if(boardMode == HEX_TO_BIN_MODE)
 		  pollAndProcessButtons();
 	  else{
-		  updateDisplayModeAndSetDotState();
-		  if(displayMode == FROM_BITS)
-			  readBinaryRepresention();
+		  updateDisplayMode();
+		  readBinaryRepresention();
 	  }
     /* USER CODE END WHILE */
 
