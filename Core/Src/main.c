@@ -34,8 +34,8 @@ typedef enum {
 } BoardMode;
 
 typedef enum {
-	FROM_INPUT, // .1 – конвертуємо DEC в HEX 0 – нічого не конвертуємо
-	FROM_BITS,
+	MANUAL_CONTROL,
+	READ_FROM_BITS,
 } DisplayMode;
 
 typedef enum {
@@ -80,6 +80,7 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 DisplayMode displayMode;
+ActiveDisplay activeDisplay = LS_DISPLAY;
 
 uint8_t DisplayPins[] = {
 	OUTPUT_DISPLAY_A_Pin,
@@ -131,9 +132,7 @@ void updateDisplayMode() {
 }
 
 void updateDisplay() {
-	static ActiveDisplay activeDisplay = LS_DISPLAY;
-
-	if(boardMode == HEX_TO_BIN_MODE || (boardMode == BIN_TO_HEX_MODE && displayMode == FROM_BITS)) {
+	if(boardMode == HEX_TO_BIN_MODE || (boardMode == BIN_TO_HEX_MODE && displayMode == READ_FROM_BITS)) {
 		ActiveDisplay notActiveDisplay = activeDisplay == MS_DISPLAY ? LS_DISPLAY : MS_DISPLAY;
 		HAL_GPIO_WritePin(GPIOA, DISPLAY_SWITCH_Pin, notActiveDisplay);
 		for (uint8_t i = 0; i < DISPLAY_SEGMENT_COUNT; i++)
@@ -145,7 +144,7 @@ void updateDisplay() {
 		    HAL_GPIO_WritePin(GPIOA, DisplayPins[i], NumberToDisplaySegments[number] << i & 0x40);
 
 		if(boardMode == BIN_TO_HEX_MODE)
-			HAL_GPIO_WritePin(GPIOB, MS_INCREMENT_BUTTON_Pin, GPIO_PIN_RESET);
+			HAL_GPIO_WritePin(GPIOB, LS_DISPLAY_DOT_Pin, GPIO_PIN_RESET);
 
 		activeDisplay = notActiveDisplay;
 	} else {
@@ -160,7 +159,7 @@ void updateDisplay() {
 		HAL_GPIO_WritePin(GPIOA, OUTPUT_DISPLAY_F_Pin, HAL_GPIO_ReadPin(GPIOB, INPUT_DISPLAY_F_Pin));
 		HAL_GPIO_WritePin(GPIOA, OUTPUT_DISPLAY_G_Pin, HAL_GPIO_ReadPin(GPIOB, INPUT_DISPLAY_G_Pin));
 
-		HAL_GPIO_WritePin(GPIOB, MS_INCREMENT_BUTTON_Pin, GPIO_PIN_SET);
+		HAL_GPIO_WritePin(GPIOB, LS_DISPLAY_DOT_Pin, GPIO_PIN_SET);
 	}
 }
 
@@ -314,7 +313,8 @@ int main(void)
 		  pollAndProcessButtons();
 	  else{
 		  updateDisplayMode();
-		  readBinaryRepresention();
+		  if(displayMode == READ_FROM_BITS)
+			  readBinaryRepresention();
 	  }
     /* USER CODE END WHILE */
 

@@ -116,6 +116,7 @@ void updateDisplay();
 #define INPUT_DISPLAY_C_Pin GPIO_PIN_9
 #define INPUT_DISPLAY_C_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
+#define LS_DISPLAY_DOT_Pin MS_INCREMENT_BUTTON_Pin
 #define DISPLAY_SEGMENT_COUNT 7
 
 #define MIN_NUMBER 0
