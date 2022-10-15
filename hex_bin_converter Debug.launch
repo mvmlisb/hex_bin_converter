@@ -68,7 +68,7 @@
     <stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="Release/hex_bin_converter.elf"/>
     <stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="hex_bin_converter"/>
     <booleanAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_AUTO_ATTR" value="false"/>
-    <stringAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_ID_ATTR" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.release.1145773752"/>
+    <stringAttribute key="org.eclipse.cdt.launch.PROJECT_BUILD_CONFIG_ID_ATTR" value="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.418955881"/>
     <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
         <listEntry value="/hex_bin_converter"/>
     </listAttribute>
