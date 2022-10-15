@@ -54,6 +54,12 @@ typedef struct {
     uint32_t pressedMillis;
     uint8_t needToProcces;
 } Button;
+
+typedef struct {
+	 GPIO_TypeDef *gpio;
+	 uint16_t pin;
+	 uint8_t input;
+} PinParams;
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -206,12 +212,12 @@ uint8_t getInvertedBit(uint8_t number, uint8_t bitPosition) {
 void writeBinaryRepresention() {
 	HAL_GPIO_WritePin(GPIOA, MS_BINARY_1_Pin, getInvertedBit(msNumber, 0));
 	HAL_GPIO_WritePin(GPIOA, MS_BINARY_2_Pin, getInvertedBit(msNumber, 1));
-	HAL_GPIO_WritePin(GPIOB, MS_BINARY_4_Pin, getInvertedBit(msNumber, 2));
+	HAL_GPIO_WritePin(GPIOA, MS_BINARY_4_Pin, getInvertedBit(msNumber, 2));
 	HAL_GPIO_WritePin(GPIOA, MS_BINARY_8_Pin, getInvertedBit(msNumber, 3));
 
-	HAL_GPIO_WritePin(GPIOB, LS_BINARY_1_Pin, getInvertedBit(lsNumber, 0));
-	HAL_GPIO_WritePin(GPIOA, LS_BINARY_2_Pin, getInvertedBit(lsNumber, 1));
-	HAL_GPIO_WritePin(GPIOA, LS_BINARY_4_Pin, getInvertedBit(lsNumber, 2));
+	HAL_GPIO_WritePin(GPIOA, LS_BINARY_1_Pin, getInvertedBit(lsNumber, 0));
+	HAL_GPIO_WritePin(GPIOB, LS_BINARY_2_Pin, getInvertedBit(lsNumber, 1));
+	HAL_GPIO_WritePin(GPIOB, LS_BINARY_4_Pin, getInvertedBit(lsNumber, 2));
 	HAL_GPIO_WritePin(GPIOA, LS_BINARY_8_Pin, getInvertedBit(lsNumber, 3));
 }
 
@@ -250,13 +256,13 @@ void readBinaryRepresention() {
 	msNumber = getNumberFromInvertedBits(
 		HAL_GPIO_ReadPin(GPIOA, MS_BINARY_1_Pin),
 		HAL_GPIO_ReadPin(GPIOA, MS_BINARY_2_Pin),
-		HAL_GPIO_ReadPin(GPIOB, MS_BINARY_4_Pin),
+		HAL_GPIO_ReadPin(GPIOA, MS_BINARY_4_Pin),
 		HAL_GPIO_ReadPin(GPIOA, MS_BINARY_8_Pin)
 	);
 	lsNumber = getNumberFromInvertedBits(
-		HAL_GPIO_ReadPin(GPIOB, LS_BINARY_1_Pin),
-		HAL_GPIO_ReadPin(GPIOA, LS_BINARY_2_Pin),
-		HAL_GPIO_ReadPin(GPIOA, LS_BINARY_4_Pin),
+		HAL_GPIO_ReadPin(GPIOA, LS_BINARY_1_Pin),
+		HAL_GPIO_ReadPin(GPIOB, LS_BINARY_2_Pin),
+		HAL_GPIO_ReadPin(GPIOB, LS_BINARY_4_Pin),
 		HAL_GPIO_ReadPin(GPIOA, LS_BINARY_8_Pin)
 	);
 }
