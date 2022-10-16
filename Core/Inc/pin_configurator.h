@@ -24,7 +24,7 @@ typedef enum {
 	BIN_TO_HEX_MODE,
 } BoardMode;
 
-PinParams BOARD_MODE_PIN = {GPIOB, GPIO_PIN_6};
+PinParams BOARD_MODE_PIN = {GPIOB, GPIO_PIN_6, INPUT};
 
 PinParams DISPLAY_SWITCH_PIN;
 PinParams OUTPUT_DISPLAY_A_PIN;
