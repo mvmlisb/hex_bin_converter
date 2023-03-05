@@ -126,39 +126,44 @@ void updateDisplayMode() {
 }
 
 void updateDisplay() {
-	if(boardMode == HEX_TO_BIN_MODE || (boardMode == BIN_TO_HEX_MODE && displayMode == READ_FROM_BITS)) {
-		ActiveDisplay notActiveDisplay = activeDisplay == MS_DISPLAY ? LS_DISPLAY : MS_DISPLAY;
-		HAL_GPIO_WritePin(DISPLAY_SWITCH_PIN.gpio, DISPLAY_SWITCH_PIN.pin, notActiveDisplay);
-		for (uint8_t i = 0; i < DISPLAY_SEGMENT_COUNT; i++) {
-		    PinParams *displayPinParams = DisplayPins[i];
-		    HAL_GPIO_WritePin(displayPinParams->gpio, displayPinParams->pin, GPIO_PIN_RESET);
-		}
+	ActiveDisplay notActiveDisplay = activeDisplay == MS_DISPLAY ? LS_DISPLAY : MS_DISPLAY;
 
+	HAL_GPIO_WritePin(DISPLAY_SWITCH_PIN.gpio, DISPLAY_SWITCH_PIN.pin, notActiveDisplay);
+	for (uint8_t i = 0; i < DISPLAY_SEGMENT_COUNT; i++) {
+	    PinParams *displayPinParams = DisplayPins[i];
+	    HAL_GPIO_WritePin(displayPinParams->gpio, displayPinParams->pin, GPIO_PIN_RESET);
+
+	    if(boardMode == BIN_TO_HEX_MODE && notActiveDisplay == LS_DISPLAY && HAL_GPIO_ReadPin(LS_DISPLAY_DOT_PIN.gpio, LS_DISPLAY_DOT_PIN.pin))
+			HAL_GPIO_WritePin(LS_DISPLAY_DOT_PIN.gpio, LS_DISPLAY_DOT_PIN.pin, GPIO_PIN_RESET);
+	}
+
+	HAL_GPIO_WritePin(DISPLAY_SWITCH_PIN.gpio, DISPLAY_SWITCH_PIN.pin, activeDisplay);
+
+	if(boardMode == HEX_TO_BIN_MODE || (boardMode == BIN_TO_HEX_MODE && displayMode == READ_FROM_BITS)) {
 		uint8_t number = activeDisplay == MS_DISPLAY ? msNumber : lsNumber;
-		HAL_GPIO_WritePin(DISPLAY_SWITCH_PIN.gpio, DISPLAY_SWITCH_PIN.pin, activeDisplay);
+
 		for (uint8_t i = 0; i < DISPLAY_SEGMENT_COUNT; i++) {
 		    PinParams *displayPinParams = DisplayPins[i];
 		    HAL_GPIO_WritePin(displayPinParams->gpio, displayPinParams->pin, NumberToDisplaySegments[number] << i & 0x40);
 		}
-
-		if(boardMode == BIN_TO_HEX_MODE)
-			HAL_GPIO_WritePin(LS_DISPLAY_DOT_PIN.gpio, LS_DISPLAY_DOT_PIN.pin, GPIO_PIN_RESET);
-
-		activeDisplay = notActiveDisplay;
 	} else {
-		activeDisplay = LS_DISPLAY;
-		HAL_GPIO_WritePin(DISPLAY_SWITCH_PIN.gpio, DISPLAY_SWITCH_PIN.pin, activeDisplay);
-
-		HAL_GPIO_WritePin(OUTPUT_DISPLAY_A_PIN.gpio, OUTPUT_DISPLAY_A_PIN.pin, HAL_GPIO_ReadPin(INPUT_DISPLAY_A_PIN.gpio, INPUT_DISPLAY_A_PIN.pin));
-		HAL_GPIO_WritePin(OUTPUT_DISPLAY_B_PIN.gpio, OUTPUT_DISPLAY_B_PIN.pin, HAL_GPIO_ReadPin(INPUT_DISPLAY_B_PIN.gpio, INPUT_DISPLAY_B_PIN.pin));
-		HAL_GPIO_WritePin(OUTPUT_DISPLAY_C_PIN.gpio, OUTPUT_DISPLAY_C_PIN.pin, HAL_GPIO_ReadPin(INPUT_DISPLAY_C_PIN.gpio, INPUT_DISPLAY_C_PIN.pin));
-		HAL_GPIO_WritePin(OUTPUT_DISPLAY_D_PIN.gpio, OUTPUT_DISPLAY_D_PIN.pin, HAL_GPIO_ReadPin(INPUT_DISPLAY_D_PIN.gpio, INPUT_DISPLAY_D_PIN.pin));
-		HAL_GPIO_WritePin(OUTPUT_DISPLAY_E_PIN.gpio, OUTPUT_DISPLAY_E_PIN.pin, HAL_GPIO_ReadPin(INPUT_DISPLAY_E_PIN.gpio, INPUT_DISPLAY_E_PIN.pin));
-		HAL_GPIO_WritePin(OUTPUT_DISPLAY_F_PIN.gpio, OUTPUT_DISPLAY_F_PIN.pin, HAL_GPIO_ReadPin(INPUT_DISPLAY_F_PIN.gpio, INPUT_DISPLAY_F_PIN.pin));
-		HAL_GPIO_WritePin(OUTPUT_DISPLAY_G_PIN.gpio, OUTPUT_DISPLAY_G_PIN.pin, HAL_GPIO_ReadPin(INPUT_DISPLAY_G_PIN.gpio, INPUT_DISPLAY_G_PIN.pin));
-
-		HAL_GPIO_WritePin(LS_DISPLAY_DOT_PIN.gpio, LS_DISPLAY_DOT_PIN.pin, GPIO_PIN_SET);
+		if(activeDisplay == LS_DISPLAY) {
+			HAL_GPIO_WritePin(LS_DISPLAY_DOT_PIN.gpio, LS_DISPLAY_DOT_PIN.pin, GPIO_PIN_SET);
+			HAL_GPIO_WritePin(OUTPUT_DISPLAY_A_PIN.gpio, OUTPUT_DISPLAY_A_PIN.pin, HAL_GPIO_ReadPin(INPUT_DISPLAY_A_PIN.gpio, INPUT_DISPLAY_A_PIN.pin));
+			HAL_GPIO_WritePin(OUTPUT_DISPLAY_B_PIN.gpio, OUTPUT_DISPLAY_B_PIN.pin, HAL_GPIO_ReadPin(INPUT_DISPLAY_B_PIN.gpio, INPUT_DISPLAY_B_PIN.pin));
+			HAL_GPIO_WritePin(OUTPUT_DISPLAY_C_PIN.gpio, OUTPUT_DISPLAY_C_PIN.pin, HAL_GPIO_ReadPin(INPUT_DISPLAY_C_PIN.gpio, INPUT_DISPLAY_C_PIN.pin));
+			HAL_GPIO_WritePin(OUTPUT_DISPLAY_D_PIN.gpio, OUTPUT_DISPLAY_D_PIN.pin, HAL_GPIO_ReadPin(INPUT_DISPLAY_D_PIN.gpio, INPUT_DISPLAY_D_PIN.pin));
+			HAL_GPIO_WritePin(OUTPUT_DISPLAY_E_PIN.gpio, OUTPUT_DISPLAY_E_PIN.pin, HAL_GPIO_ReadPin(INPUT_DISPLAY_E_PIN.gpio, INPUT_DISPLAY_E_PIN.pin));
+			HAL_GPIO_WritePin(OUTPUT_DISPLAY_F_PIN.gpio, OUTPUT_DISPLAY_F_PIN.pin, HAL_GPIO_ReadPin(INPUT_DISPLAY_F_PIN.gpio, INPUT_DISPLAY_F_PIN.pin));
+			HAL_GPIO_WritePin(OUTPUT_DISPLAY_G_PIN.gpio, OUTPUT_DISPLAY_G_PIN.pin, HAL_GPIO_ReadPin(INPUT_DISPLAY_G_PIN.gpio, INPUT_DISPLAY_G_PIN.pin));
+		} else
+			for (uint8_t i = 0; i < DISPLAY_SEGMENT_COUNT; i++) {
+			    PinParams *displayPinParams = DisplayPins[i];
+			    HAL_GPIO_WritePin(displayPinParams->gpio, displayPinParams->pin, NumberToDisplaySegments[msNumber] << i & 0x40);
+			}
 	}
+
+	activeDisplay = notActiveDisplay;
 }
 
 void updateButton(Button *button) {
@@ -303,8 +308,7 @@ int main(void)
 		  pollAndProcessButtons();
 	  else{
 		  updateDisplayMode();
-		  if(displayMode == READ_FROM_BITS)
-			  readBinaryRepresention();
+		  readBinaryRepresention();
 	  }
     /* USER CODE END WHILE */
 
